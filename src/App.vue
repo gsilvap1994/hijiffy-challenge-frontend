@@ -26,6 +26,15 @@
 			@showContactModal="showContactModal($event)"
 		/>
 	</main>
+	<app-shared-pager
+		:currentPage="currentPage"
+		:totalPages="totalPages"
+		:perPage="perPage"
+		:perPageModel="perPageModel"
+		@previousPage="previousPage"
+		@nextPage="nextPage"
+		@perPageChange="perPageChange($event)"
+	/>
 	<app-footer />
 	<app-calendar-view
 		:isModalVisible="isModalVisible"
@@ -42,6 +51,7 @@ import Footer from './components/footer/Footer.vue';
 import ContactList from './components/contact-list/ContactList.vue';
 import CalendarView from './components/calendar-view/CalendarView.vue';
 import Button from './components/shared/button/Button.vue';
+import Pagination from './components/shared/pagination/Pagination.vue';
 
 export default defineComponent({
 	name: 'App',
@@ -51,6 +61,7 @@ export default defineComponent({
 		'app-contact-list': ContactList,
 		'app-calendar-view': CalendarView,
 		'app-shared-button': Button,
+		'app-shared-pager': Pagination,
 	},
 	computed: {
 		filterCompanies() {
@@ -70,14 +81,15 @@ export default defineComponent({
 			companies: [],
 			isModalVisible: false,
 			filterCompany: '',
+			currentPage: 0,
+			totalPages: 1,
+			perPage: 10,
+			perPageModel: [],
 		};
 	},
 	async created() {
 		try {
-			const res = await axios.get(`http://localhost:3000/contacts`);
-			this.contacts = res.data;
-			this.companies = this.contacts.map((contact) => contact.company_name);
-			this.companies = this.companies.sort();
+			this.initState();
 		} catch (e) {
 			console.log(e);
 		}
@@ -89,6 +101,41 @@ export default defineComponent({
 		},
 		closeContactModal() {
 			this.isModalVisible = false;
+		},
+		previousPage() {
+			this.currentPage -= 1;
+			this.initState();
+		},
+		nextPage() {
+			this.currentPage += 1;
+			this.initState();
+		},
+		perPageChange($event) {
+			this.perPage = +$event;
+			this.currentPage = 0;
+			this.initState();
+		},
+
+		async initState() {
+			const res = await axios.get(
+				`http://localhost:3000/contacts?limit${this.perPage}&offset=${this.currentPage}`,
+			);
+			this.contacts = res.data;
+			const totalRecords = this.contacts.length;
+			this.perPage = this.perPage ? this.perPage : totalRecords;
+			if (totalRecords !== this.perPage) {
+				console.log(this.currentPage * this.perPage);
+				console.log(this.perPage);
+				console.log(this.contacts.slice(2, this.perPage));
+				this.contacts = this.contacts.slice(
+					this.currentPage * this.perPage,
+					this.currentPage * this.perPage + this.perPage,
+				);
+			}
+			this.perPageModel = Array.from({ length: totalRecords }, (_, i) => i + 1);
+			this.totalPages = totalRecords / this.perPage;
+			this.companies = this.contacts.map((contact) => contact.company_name);
+			this.companies = this.companies.sort();
 		},
 	},
 });
