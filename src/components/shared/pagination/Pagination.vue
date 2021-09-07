@@ -1,5 +1,5 @@
 <template>
-	<div class="pagination">
+	<div class="pagination" :class="lightTheme ? '' : 'dark'">
 		<div
 			class="prev"
 			@click="previousPage"
@@ -64,6 +64,10 @@ export default {
 			required: true,
 			type: Array,
 		},
+		lightTheme: {
+			required: true,
+			type: Boolean,
+		},
 	},
 	methods: {
 		previousPage() {
@@ -86,6 +90,9 @@ export default {
 <style lang="scss" scoped>
 .pagination {
 	background-color: $light-primary-light-grey;
+	&.dark {
+		background-color: $dark-primary-black;
+	}
 	display: flex;
 	justify-content: center;
 	align-items: baseline;

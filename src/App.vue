@@ -1,10 +1,11 @@
 <template>
 	<app-header
+		:lightTheme="lightTheme"
 		:isAuthenticated="true"
 		:hasNotifications="true"
 		:imgSrc="require(`@/assets/images/icons/profile.jpg`)"
 	/>
-	<main class="main-page">
+	<main class="main-page" :class="lightTheme ? '' : 'dark'">
 		<div class="table-actions">
 			<div class="filter">
 				<span>Company: </span>
@@ -19,14 +20,20 @@
 					</option>
 				</select>
 			</div>
-			<app-shared-button :type="'button'" :label="'Add Contact'" />
+			<app-shared-button
+				:lightTheme="lightTheme"
+				:type="'button'"
+				:label="'Add Contact'"
+			/>
 		</div>
 		<app-contact-list
+			:lightTheme="lightTheme"
 			:contacts="filterCompanies"
 			@showContactModal="showContactModal($event)"
 		/>
 	</main>
 	<app-shared-pager
+		:lightTheme="lightTheme"
 		:currentPage="currentPage"
 		:totalPages="totalPages"
 		:perPage="perPage"
@@ -35,7 +42,7 @@
 		@nextPage="nextPage"
 		@perPageChange="perPageChange($event)"
 	/>
-	<app-footer />
+	<app-footer :lightTheme="lightTheme" @changeTheme="changeTheme($event)" />
 	<app-calendar-view
 		:isModalVisible="isModalVisible"
 		@modalClose="closeContactModal"
@@ -66,11 +73,13 @@ export default defineComponent({
 	computed: {
 		filterCompanies() {
 			if (this.filterCompany) {
-				return this.contacts.filter(
+				const filteredCompanies = this.contacts.filter(
 					(contact) =>
 						contact.company_name.toLowerCase() ===
 						this.filterCompany.toLowerCase(),
 				);
+
+				return filteredCompanies;
 			}
 			return this.contacts;
 		},
@@ -83,8 +92,9 @@ export default defineComponent({
 			filterCompany: '',
 			currentPage: 0,
 			totalPages: 1,
-			perPage: 10,
+			perPage: 0,
 			perPageModel: [],
+			lightTheme: true,
 		};
 	},
 	async created() {
@@ -95,6 +105,10 @@ export default defineComponent({
 		}
 	},
 	methods: {
+		changeTheme($event) {
+			this.lightTheme = $event;
+			console.log(this.lightTheme);
+		},
 		showContactModal(id) {
 			console.log(id);
 			this.isModalVisible = true;
@@ -134,6 +148,7 @@ export default defineComponent({
 			}
 			this.perPageModel = Array.from({ length: totalRecords }, (_, i) => i + 1);
 			this.totalPages = totalRecords / this.perPage;
+			console.log(this.totalPages);
 			this.companies = this.contacts.map((contact) => contact.company_name);
 			this.companies = this.companies.sort();
 		},
@@ -156,6 +171,11 @@ body {
 .main-page {
 	background-color: $light-primary-light-grey;
 	padding-top: calc(100px + 2rem);
+
+	&.dark {
+		background-color: $dark-primary-black;
+		color: $dark-color-text;
+	}
 
 	.contact-list,
 	.table-actions {

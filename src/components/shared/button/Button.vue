@@ -7,8 +7,12 @@
 export default {
 	computed: {
 		btnStyle() {
-			if (this.buttonStyle === 'default' || !this.buttonStyle)
+			if (!this.lightTheme) {
+				return 'button-default dark';
+			}
+			if (this.buttonStyle === 'default' || !this.buttonStyle) {
 				return 'button-default';
+			}
 			return 'button-danger';
 		},
 	},
@@ -24,6 +28,10 @@ export default {
 		},
 		buttonStyle: {
 			type: String,
+		},
+		lightTheme: {
+			required: true,
+			type: Boolean,
 		},
 	},
 
@@ -54,5 +62,11 @@ export default {
 .button-default {
 	background: $light-primary-blue;
 	color: white;
+
+	&.dark {
+		background-color: $dark-color-text;
+		color: $light-primary-blue;
+		border-color: $light-primary-blue;
+	}
 }
 </style>

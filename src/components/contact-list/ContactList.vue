@@ -1,5 +1,5 @@
 <template>
-	<div class="contact-list">
+	<div class="contact-list" :class="lightTheme ? '' : 'dark'">
 		<table>
 			<thead>
 				<tr>
@@ -67,7 +67,6 @@ export default {
 			},
 		};
 	},
-
 	methods: {
 		formatDate(date) {
 			const month = new Date(date).toLocaleString('default', {
@@ -91,11 +90,14 @@ export default {
 			this.$emit('showContactModal', $event);
 		},
 	},
-
 	props: {
 		contacts: {
 			required: true,
 			type: Array,
+		},
+		lightTheme: {
+			required: true,
+			type: Boolean,
 		},
 	},
 };
@@ -110,17 +112,19 @@ export default {
 		thead {
 			background-color: #fff;
 			border-bottom: 1px solid $light-primary-light-grey;
-			border-radius: $default-border-radius;
+			border-top-left-radius: $default-border-radius;
+			border-top-right-radius: $default-border-radius;
 			display: table;
 			width: calc(100% - 1em);
 			table-layout: fixed;
 
 			th {
-				background: white;
+				background-color: white;
 				position: sticky;
 				top: 0;
 				padding: 1rem;
-				border-radius: $default-border-radius;
+				border-top-left-radius: $default-border-radius;
+				border-top-right-radius: $default-border-radius;
 			}
 		}
 
@@ -130,10 +134,12 @@ export default {
 			display: block;
 			height: 250px;
 			overflow-y: auto;
-			border-radius: $default-border-radius;
+			border-bottom-left-radius: $default-border-radius;
+			border-bottom-right-radius: $default-border-radius;
 
 			tr {
-				border-radius: $default-border-radius;
+				border-bottom-left-radius: $default-border-radius;
+				border-bottom-right-radius: $default-border-radius;
 				cursor: pointer;
 				display: table;
 				width: 100%;
@@ -143,7 +149,6 @@ export default {
 				}
 			}
 			td {
-				border-radius: $default-border-radius;
 				padding: 1rem;
 				text-align: center;
 				border-bottom: 1px solid $light-primary-light-grey;
@@ -162,6 +167,18 @@ export default {
 						font-weight: bold;
 					}
 				}
+			}
+		}
+	}
+	&.dark {
+		table {
+			thead,
+			thead th,
+			tbody,
+			tbody td {
+				background-color: $light-color-text;
+				border-color: $dark-primary-black;
+				color: black;
 			}
 		}
 	}
