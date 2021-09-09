@@ -79,8 +79,10 @@ export default defineComponent({
 						this.filterCompany.toLowerCase(),
 				);
 
+				this.paginateResponse(filteredCompanies.length);
 				return filteredCompanies;
 			}
+			this.paginateResponse(this.contacts.length);
 			return this.contacts;
 		},
 	},
@@ -107,7 +109,6 @@ export default defineComponent({
 	methods: {
 		changeTheme($event) {
 			this.lightTheme = $event;
-			console.log(this.lightTheme);
 		},
 		showContactModal(id) {
 			console.log(id);
@@ -135,12 +136,14 @@ export default defineComponent({
 				`http://localhost:3000/contacts?limit${this.perPage}&offset=${this.currentPage}`,
 			);
 			this.contacts = res.data;
-			const totalRecords = this.contacts.length;
+			this.paginateResponse(this.contacts.length);
+			this.companies = this.contacts.map((contact) => contact.company_name);
+			this.companies = this.uniqueSortArray(this.companies);
+		},
+
+		paginateResponse(totalRecords) {
 			this.perPage = this.perPage ? this.perPage : totalRecords;
 			if (totalRecords !== this.perPage) {
-				console.log(this.currentPage * this.perPage);
-				console.log(this.perPage);
-				console.log(this.contacts.slice(2, this.perPage));
 				this.contacts = this.contacts.slice(
 					this.currentPage * this.perPage,
 					this.currentPage * this.perPage + this.perPage,
@@ -148,9 +151,10 @@ export default defineComponent({
 			}
 			this.perPageModel = Array.from({ length: totalRecords }, (_, i) => i + 1);
 			this.totalPages = totalRecords / this.perPage;
-			console.log(this.totalPages);
-			this.companies = this.contacts.map((contact) => contact.company_name);
-			this.companies = this.companies.sort();
+		},
+
+		uniqueSortArray(array) {
+			return Array.from(new Set(array)).sort();
 		},
 	},
 });

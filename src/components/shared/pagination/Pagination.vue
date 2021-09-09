@@ -17,7 +17,7 @@
 		</div>
 		<div
 			class="next"
-			:class="currentPage + 1 === totalPages ? 'disabled  ' : ''"
+			:class="currentPage + 1 >= totalPages ? 'disabled  ' : ''"
 			@click="nextPage"
 		>
 			<span>Next</span>
@@ -76,7 +76,9 @@ export default {
 			}
 		},
 		nextPage() {
-			if (this.currentPage + 1 !== this.totalPages) {
+			console.log(this.currentPage);
+			console.log(this.totalPages);
+			if (this.currentPage + 1 < this.totalPages) {
 				this.$emit('nextPage');
 			}
 		},
