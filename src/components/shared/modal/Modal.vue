@@ -1,6 +1,10 @@
 <template>
 	<div class="modal-backdrop" @click="close">
-		<div class="modal" @click="handleModalClick($event)">
+		<div
+			class="modal"
+			:class="lightTheme ? '' : 'dark'"
+			@click="handleModalClick($event)"
+		>
 			<header class="modal-header">
 				<slot name="header"> This is the default title! </slot>
 			</header>
@@ -15,6 +19,12 @@
 <script>
 export default {
 	name: 'Modal',
+	props: {
+		lightTheme: {
+			required: true,
+			type: Boolean,
+		},
+	},
 	methods: {
 		close() {
 			this.$emit('modalClose');
@@ -63,6 +73,14 @@ export default {
 			padding: 1.5rem 0.75rem;
 			max-height: 70vh;
 			overflow: auto;
+		}
+
+		&.dark {
+			background-color: $dark-primary-black;
+
+			.modal-header {
+				border-bottom: 1px solid $dark-primary-soft-black;
+			}
 		}
 	}
 }

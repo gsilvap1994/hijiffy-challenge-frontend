@@ -46,6 +46,7 @@
 	<app-calendar-view
 		:isModalVisible="isModalVisible"
 		@modalClose="closeContactModal"
+		:lightTheme="lightTheme"
 	/>
 </template>
 
@@ -179,6 +180,10 @@ body {
 	&.dark {
 		background-color: $dark-primary-black;
 		color: $dark-color-text;
+
+		.select {
+			color: $dark-light-blue;
+		}
 	}
 
 	.contact-list,

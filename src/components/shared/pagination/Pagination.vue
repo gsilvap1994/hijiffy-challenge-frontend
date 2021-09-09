@@ -76,8 +76,6 @@ export default {
 			}
 		},
 		nextPage() {
-			console.log(this.currentPage);
-			console.log(this.totalPages);
 			if (this.currentPage + 1 < this.totalPages) {
 				this.$emit('nextPage');
 			}
@@ -94,6 +92,10 @@ export default {
 	background-color: $light-primary-light-grey;
 	&.dark {
 		background-color: $dark-primary-black;
+
+		.select {
+			color: $dark-light-blue;
+		}
 	}
 	display: flex;
 	justify-content: center;

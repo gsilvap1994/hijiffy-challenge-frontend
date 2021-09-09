@@ -20,7 +20,11 @@
 			</div>
 			<div class="logo">
 				<img
-					:src="require(`@/assets/images/logo/logo.png`)"
+					:src="
+						require(`@/assets/images/logo/${
+							lightTheme ? 'logo' : 'logo_white'
+						}.png`)
+					"
 					alt="Hijiffy company logo"
 				/>
 			</div>

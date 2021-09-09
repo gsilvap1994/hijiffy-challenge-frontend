@@ -1,7 +1,11 @@
 <template>
-	<app-shared-modal v-show="isModalVisible" @modalClose="modalClose">
+	<app-shared-modal
+		:lightTheme="lightTheme"
+		v-show="isModalVisible"
+		@modalClose="modalClose"
+	>
 		<template v-slot:header>
-			<div class="date-view">
+			<div class="date-view" :class="lightTheme ? '' : 'dark'">
 				<header>
 					<strong>CALENDAR</strong>
 				</header>
@@ -11,12 +15,15 @@
 					</strong>
 				</div>
 			</div>
-			<div class="close" @click="modalClose">X</div>
+			<div class="close" :class="lightTheme ? '' : 'dark'" @click="modalClose">
+				X
+			</div>
 		</template>
 
 		<template v-slot:body>
 			<div
 				class="days"
+				:class="lightTheme ? '' : 'dark'"
 				v-for="(day, index) of schedule"
 				:key="`schedule-day-${day.id}`"
 			>
@@ -29,6 +36,7 @@
 						:startDate="event.startDate"
 						:endDate="event.endDate"
 						:active="event.active"
+						:lightTheme="lightTheme"
 					/>
 				</div>
 				<div class="other" v-if="index">
@@ -40,6 +48,7 @@
 						:startDate="event.startDate"
 						:endDate="event.endDate"
 						:active="event.active"
+						:lightTheme="lightTheme"
 					/>
 				</div>
 			</div>
@@ -111,7 +120,11 @@ export default {
 	},
 	props: {
 		isModalVisible: {
-			required: 'true',
+			required: true,
+			type: Boolean,
+		},
+		lightTheme: {
+			required: true,
 			type: Boolean,
 		},
 	},
@@ -139,14 +152,37 @@ export default {
 		color: $light-color-text;
 		font-size: $font-small;
 	}
+
+	&.dark {
+		color: $dark-light-blue;
+		header {
+			color: $dark-color-text;
+		}
+	}
 }
 .close {
 	color: $light-color-text;
+	&.dark {
+		color: $dark-color-text;
+	}
 	cursor: pointer;
 	font-size: $font-large;
 }
 
 .days {
+	&.dark {
+		.header {
+			border-bottom: 1px solid $dark-primary-soft-black;
+		}
+		.first {
+			.header {
+				color: $dark-light-blue;
+			}
+		}
+		.other {
+			color: $dark-color-text;
+		}
+	}
 	.header {
 		padding: 0 0.75rem 1rem;
 		margin: 0 -0.75rem 1rem;

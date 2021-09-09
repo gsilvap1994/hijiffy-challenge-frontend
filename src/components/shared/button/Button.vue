@@ -65,8 +65,8 @@ export default {
 
 	&.dark {
 		background-color: $dark-color-text;
-		color: $light-primary-blue;
-		border-color: $light-primary-blue;
+		color: $dark-primary-black;
+		border-color: $dark-primary-black;
 	}
 }
 </style>

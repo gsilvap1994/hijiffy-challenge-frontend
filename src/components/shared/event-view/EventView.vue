@@ -1,5 +1,8 @@
 <template>
-	<div class="event-view" :class="active ? 'active' : 'canceled'">
+	<div
+		class="event-view"
+		:class="{ active: active, canceled: !active, dark: !lightTheme }"
+	>
 		<div class="title">
 			{{ title }}
 		</div>
@@ -30,6 +33,10 @@ export default {
 			required: true,
 			type: Boolean,
 		},
+		lightTheme: {
+			required: true,
+			type: Boolean,
+		},
 	},
 	methods: {
 		formatTime(date, ampm) {
@@ -54,6 +61,17 @@ export default {
 	font-weight: 900;
 	font-size: small;
 	margin-bottom: 0.5rem;
+
+	&.dark {
+		&.active {
+			background-color: $dark-light-blue;
+			color: $dark-primary-black;
+		}
+		&.canceled {
+			color: $dark-primary-black;
+			border-color: $dark-light-blue;
+		}
+	}
 
 	&.active {
 		background-color: $light-primary-blue;
