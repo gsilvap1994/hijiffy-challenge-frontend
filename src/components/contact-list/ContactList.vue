@@ -1,7 +1,7 @@
 <template>
 	<div class="contact-list" :class="lightTheme ? '' : 'dark'">
 		<table>
-			<thead>
+			<thead :class="contacts.length > 4 ? 'reduced-size' : 'full-size'">
 				<tr>
 					<th>
 						<input
@@ -115,7 +115,6 @@ export default {
 			border-top-left-radius: $default-border-radius;
 			border-top-right-radius: $default-border-radius;
 			display: table;
-			width: calc(100% - 1em);
 			table-layout: fixed;
 
 			th {
@@ -132,7 +131,7 @@ export default {
 			background-color: #fff;
 			color: #000;
 			display: block;
-			height: 250px;
+			max-height: 280px;
 			overflow-y: auto;
 			border-bottom-left-radius: $default-border-radius;
 			border-bottom-right-radius: $default-border-radius;
@@ -182,5 +181,13 @@ export default {
 			}
 		}
 	}
+}
+
+.full-size {
+	width: 100%;
+}
+
+.reduced-size {
+	width: calc(100% - 1em);
 }
 </style>
